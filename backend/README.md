@@ -61,14 +61,20 @@ backend/
    mvn clean package
    ```
 
-3. **Executar com Maven (usando OpenLiberty):**
+3. **Executar o servidor:**
    ```bash
-   mvn liberty:run
+   # Usando Jetty (recomendado para desenvolvimento)
+   mvn jetty:run
+   
+   # Ou package e deploy manual
+   mvn clean package
+   # Deploy do arquivo target/pokedex-backend.war em qualquer servidor
    ```
 
-4. **Deploy manual:**
-   - Copie o arquivo `target/pokedx-backend.war` para a pasta de deploy do seu servidor
-   - Acesse `http://localhost:8080/pokedx-backend`
+4. **Verificar se está funcionando:**
+   ```bash
+   curl http://localhost:8080/api/health
+   ```
 
 ## 📡 API Endpoints
 
