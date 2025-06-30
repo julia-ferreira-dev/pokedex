@@ -50,7 +50,7 @@ pokedx/
 ```bash
 git clone https://github.com/seu-usuario/pokedex.git
 cd pokedx/backend
-mvn clean compile exec:java
+mvn clean compile jetty:run
 ```
 🌐 **Backend rodando em:** `http://localhost:8080`
 
