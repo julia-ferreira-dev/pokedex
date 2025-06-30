@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <display-name>Pokédex Backend API</display-name>
+    <description>Backend Java EE para integração com PokéAPI</description>
+
+    <!-- Configuração do servlet de saúde -->
+    <servlet>
+        <servlet-name>HealthServlet</servlet-name>
+        <servlet-class>com.pokedex.servlet.HealthServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HealthServlet</servlet-name>
+        <url-pattern>/api/health</url-pattern>
+    </servlet-mapping>
+
+    <!-- Configuração do servlet de Pokémon -->
+    <servlet>
+        <servlet-name>PokemonServlet</servlet-name>
+        <servlet-class>com.pokedex.servlet.PokemonServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PokemonServlet</servlet-name>
+        <url-pattern>/api/pokemon</url-pattern>
+    </servlet-mapping>
+
+    <!-- Página de boas-vindas -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- Configuração de timeout de sessão -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+</web-app>

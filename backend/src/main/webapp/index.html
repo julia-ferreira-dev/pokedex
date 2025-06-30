@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex Backend API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .endpoint {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #007bff;
+            border-radius: 4px;
+        }
+        .method {
+            font-weight: bold;
+            color: #28a745;
+        }
+        .url {
+            font-family: monospace;
+            background-color: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        .example {
+            background-color: #f1f3f4;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.running { background-color: #28a745; }
+        .status.error { background-color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Pokédex Backend API</h1>
+        <p>Bem-vindo à API do backend da Pokédex! Esta API integra com a PokéAPI para fornecer informações sobre Pokémon.</p>
+        
+        <h2>📊 Status da API</h2>
+        <div id="status" class="status error">Verificando...</div>
+        
+        <h2>📋 Endpoints Disponíveis</h2>
+        
+        <div class="endpoint">
+            <h3><span class="method">GET</span> <span class="url">/api/health</span></h3>
+            <p>Verifica se a API está funcionando.</p>
+            <div class="example">
+                <strong>Exemplo de resposta:</strong><br>
+                {<br>
+                &nbsp;&nbsp;"status": "OK",<br>
+                &nbsp;&nbsp;"message": "Pokédex API está funcionando!"<br>
+                }
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method">GET</span> <span class="url">/api/pokemon?name={nome}</span></h3>
+            <p>Busca informações de um Pokémon pelo nome.</p>
+            <div class="example">
+                <strong>Exemplo de requisição:</strong><br>
+                GET /api/pokemon?name=pikachu<br><br>
+                <strong>Exemplo de resposta:</strong><br>
+                {<br>
+                &nbsp;&nbsp;"name": "pikachu",<br>
+                &nbsp;&nbsp;"image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",<br>
+                &nbsp;&nbsp;"id": 25<br>
+                }
+            </div>
+        </div>
+
+        <h2>🛠️ Como Usar</h2>
+        <ol>
+            <li>Faça uma requisição GET para <code>/api/pokemon?name=NOME_DO_POKEMON</code></li>
+            <li>Substitua <code>NOME_DO_POKEMON</code> pelo nome do Pokémon desejado</li>
+            <li>A API retornará o nome, imagem e ID do Pokémon</li>
+        </ol>
+
+        <h2>🔧 Teste Rápido</h2>
+        <div style="margin: 20px 0;">
+            <input type="text" id="pokemonName" placeholder="Digite o nome do Pokémon" style="padding: 8px; margin-right: 10px; width: 200px;">
+            <button onclick="testPokemon()" style="padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Buscar</button>
+        </div>
+        <div id="testResult" class="example" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Verificar status da API
+        fetch('/api/health')
+            .then(response => response.json())
+            .then(data => {
+                const statusEl = document.getElementById('status');
+                statusEl.textContent = 'API Funcionando ✅';
+                statusEl.className = 'status running';
+            })
+            .catch(error => {
+                const statusEl = document.getElementById('status');
+                statusEl.textContent = 'API Indisponível ❌';
+                statusEl.className = 'status error';
+            });
+
+        function testPokemon() {
+            const name = document.getElementById('pokemonName').value.trim();
+            if (!name) {
+                alert('Por favor, digite o nome de um Pokémon');
+                return;
+            }
+
+            const resultEl = document.getElementById('testResult');
+            resultEl.style.display = 'block';
+            resultEl.textContent = 'Buscando...';
+
+            fetch(`/api/pokemon?name=${encodeURIComponent(name)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        resultEl.innerHTML = `<strong>Erro:</strong> ${data.message}`;
+                    } else {
+                        resultEl.innerHTML = `
+                            <strong>Resultado:</strong><br>
+                            Nome: ${data.name}<br>
+                            ID: ${data.id}<br>
+                            Imagem: <img src="${data.image}" alt="${data.name}" style="width: 50px; height: 50px; vertical-align: middle;">
+                        `;
+                    }
+                })
+                .catch(error => {
+                    resultEl.innerHTML = `<strong>Erro:</strong> Falha na comunicação com a API`;
+                });
+        }
+
+        // Permitir busca com Enter
+        document.getElementById('pokemonName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                testPokemon();
+            }
+        });
+    </script>
+</body>
+</html>
